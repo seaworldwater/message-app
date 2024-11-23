@@ -6,10 +6,14 @@
 .master {
   text-align: center;
   justify-content: center;
-  display: flex;
+  display: grid;
 }
 
 .container {
+  display: flex;
+}
+
+.wrapper {
   text-align: center;
   padding: 20px;
 }
@@ -27,4 +31,18 @@
 
 .button {
   cursor: pointer;
+}
+
+.sent {
+  text-align: right;
+  background-color: rgb(142, 142, 142);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.received {
+  text-align: left;
+  background-color: rgb(185, 185, 185);
+  padding: 10px;
+  border-radius: 10px;
 }
