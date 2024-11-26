@@ -14,7 +14,7 @@ const io = new Server(server, {
   },
 });
 
-function calculatePeopleInRoom(room) {
+function calculatePeopleInRoom(socket, room) {
   let size = io.sockets.adapter.rooms.get(room).size;
   let info = [room, size];
   socket.nsp.to(room).emit("people-in-room", info);
@@ -22,7 +22,7 @@ function calculatePeopleInRoom(room) {
 
 function joinRoom(socket, room) {
   socket.join(room);
-  calculatePeopleInRoom(room);
+  calculatePeopleInRoom(socket, room);
 }
 
 io.on("connection", (socket) => {
@@ -32,10 +32,6 @@ io.on("connection", (socket) => {
 
   socket.on("send-message", (data) => {
     socket.to(data.room).emit("receive-message", data);
-  });
-
-  socket.on("disconnect", function () {
-    calculatePeopleInRoom();
   });
 });
 

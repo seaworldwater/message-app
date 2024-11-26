@@ -46,3 +46,15 @@
   padding: 10px;
   border-radius: 10px;
 }
+
+.room-status {
+  font-weight: 600;
+  font-size: 21px;
+  color: rgb(34, 34, 37);
+}
+
+.client-status {
+  font-weight: 400;
+  font-size: 16px;
+  color: rgb(56, 56, 61);
+}
