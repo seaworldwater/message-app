@@ -12,27 +12,39 @@ function App() {
     "You are not currently in a room."
   );
   const [clientsStatus, setClientsStatus] = useState("");
-  const [disabled, setDisabled] = useState(true);
+  const [messageDisabled, setMessageDisabled] = useState(true);
 
   function joinRoom() {
-    setRoomStatus(`You are in room ${room}.`);
-    socket.emit("join-room", room);
-    setDisabled(false);
+    let newRoom = document.getElementById("roomInput").value;
+    setRoomStatus(`You are in room ${newRoom}.`);
+    socket.emit("join-room", { room, newRoom });
+    setRoom(newRoom);
+    setMessageDisabled(false);
+    setMessages([]);
   }
 
   function sendMessage() {
-    socket.emit("send-message", { currentMessage, room });
-    setMessages((messages) => [...messages, ["sent", currentMessage]]);
+    let id = socket.id;
+    socket.emit("send-message", { currentMessage, room, id });
+    setMessages((messages) => [
+      ...messages,
+      [["sent", socket.id], currentMessage],
+    ]);
   }
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
       setMessages((messages) => [
         ...messages,
-        ["received", data.currentMessage],
+        [["received", data.id], data.currentMessage],
       ]);
     });
   }, [socket]);
+
+  useEffect(() => {
+    const wrapper = document.getElementById("messages-wrapper");
+    wrapper.scrollTop = wrapper.scrollHeight;
+  }, [messages]);
 
   useEffect(() => {
     socket.on("people-in-room", (data) => {
@@ -52,7 +64,7 @@ function App() {
             type="text"
             className="input"
             placeholder="Room..."
-            onChange={(e) => setRoom(e.target.value)}
+            id="roomInput"
           />
           <button className="button" onClick={joinRoom}>
             Join
@@ -64,7 +76,7 @@ function App() {
             className="input"
             placeholder="Message..."
             onChange={(e) => setCurrentMessage(e.target.value)}
-            disabled={disabled}
+            disabled={messageDisabled}
           />
           <button className="button" onClick={sendMessage}>
             Send
@@ -75,10 +87,11 @@ function App() {
         <h2 className="room-status">{roomStatus}</h2>
         <h3 className="client-status">{clientsStatus}</h3>
       </div>
-      <div className="wrapper">
+      <div className="messages-wrapper" id="messages-wrapper">
         {messages.map((message) => (
-          <div key={message[1]} className={message[0]}>
-            {message[1]}
+          <div key={`${messages.indexOf(message)}`} className={message[0][0]}>
+            <div>{message[0][1]}</div>
+            <div>{message[1]}</div>
           </div>
         ))}
       </div>

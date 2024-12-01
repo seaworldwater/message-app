@@ -18,6 +18,13 @@
   padding: 20px;
 }
 
+.messages-wrapper {
+  text-align: center;
+  overflow-y: scroll;
+  flex-direction: column-reverse;
+  height: 500px;
+}
+
 .input,
 .button {
   padding: 5px 10px;
@@ -35,14 +42,14 @@
 
 .sent {
   text-align: right;
-  background-color: rgb(142, 142, 142);
+  background-color: rgb(145, 237, 219);
   padding: 10px;
   border-radius: 10px;
 }
 
 .received {
   text-align: left;
-  background-color: rgb(185, 185, 185);
+  background-color: rgb(87, 195, 188);
   padding: 10px;
   border-radius: 10px;
 }
@@ -57,4 +64,10 @@
   font-weight: 400;
   font-size: 16px;
   color: rgb(56, 56, 61);
+}
+
+@media screen and (max-width: 650px) {
+  .container {
+    display: grid;
+  }
 }

@@ -14,24 +14,36 @@ const io = new Server(server, {
   },
 });
 
-function calculatePeopleInRoom(socket, room) {
+function calculatePeopleInRoom(socket, room, minus) {
   let size = io.sockets.adapter.rooms.get(room).size;
-  let info = [room, size];
+  let info = [room, size - minus];
   socket.nsp.to(room).emit("people-in-room", info);
 }
 
-function joinRoom(socket, room) {
-  socket.join(room);
-  calculatePeopleInRoom(socket, room);
+function joinRoom(socket, current, newroom) {
+  socket.join(newroom);
+  if (current !== "") {
+    calculatePeopleInRoom(socket, current, 1);
+  }
+  calculatePeopleInRoom(socket, newroom, 0);
 }
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  let currentRoom = "";
 
-  socket.on("join-room", (data) => joinRoom(socket, data));
+  socket.on("join-room", (data) => {
+    joinRoom(socket, data.room, data.newRoom);
+    currentRoom = data.newRoom;
+  });
 
   socket.on("send-message", (data) => {
     socket.to(data.room).emit("receive-message", data);
+  });
+
+  socket.on("disconnect", function () {
+    if (currentRoom !== "") {
+      calculatePeopleInRoom(socket, currentRoom, 0);
+    }
   });
 });
 
