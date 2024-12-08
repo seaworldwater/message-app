@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:5174/");
+const socket = io.connect("https://message-app-jbm8.onrender.com:5174");
 
 function App() {
   const [messages, setMessages] = useState([]);
