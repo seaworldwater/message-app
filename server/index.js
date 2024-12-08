@@ -9,7 +9,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://message-app-jbm8.onrender.com/",
+    origin: "https://message-app-jbm8.onrender.com",
     methods: ["GET", "POST"],
   },
 });
