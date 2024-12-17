@@ -14,6 +14,10 @@ const io = new Server(server, {
   },
 });
 
+app.get("/", (req, res) => {
+  res.send("WebSocket server is running!");
+});
+
 function calculatePeopleInRoom(socket, room, minus) {
   let size = io.sockets.adapter.rooms.get(room).size;
   let info = [room, size - minus];
