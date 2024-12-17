@@ -15,7 +15,7 @@ const io = new Server(server, {
 });
 
 app.get("/", (req, res) => {
-  res.send("WebSocket server is running!");
+  app.use(express.static("client"));
 });
 
 function calculatePeopleInRoom(socket, room, minus) {
